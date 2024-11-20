@@ -1,100 +1,121 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React from "react";
+import { useRouter } from "next/navigation";
+import { Carousel } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Link from 'next/link';
+
+export default function Index() {
+  const router = useRouter();
+
+  const handleLoginRedirect = () => {
+    router.push("/login");
+  };
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="container-fluid">
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-4">
+        <div className="container">
+          {/* Logo - Centrando y aumentando el tamaño */}
+          <Link href="/" className="navbar-brand mx-auto">
+          <img
+              src="https://images.vexels.com/media/users/3/200098/isolated/lists/7ad7c76da9a0cd7d2b01b64b2590617b-icono-de-carrito-de-compras-icono-de-carrito-de-compras.png" // Asegúrate de tener tu imagen de logo en la carpeta 'public'
+              alt="ProductosOnline"
+              style={{ width: '50', height: 'auto' }} // Aumenta el ancho aquí
+              className="d-block mx-auto"
+          />
+      </Link>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          {/* Botón de login */}
+          <div className="d-flex justify-content-end">
+            <button
+              className="btn btn-light ms-3"
+              onClick={() => router.push('/login')}
+            >
+              Ingrese aquí
+            </button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </nav>
+
+      {/* Carrusel */}
+      <div className="carousel-container">
+        <Carousel className="mt-4">
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://th.bing.com/th/id/OIG4.r1IKq.qnXVbwjAgcQdMT?w=1024&h=1024&rs=1&pid=ImgDetMain"
+              alt="Comida 1"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://th.bing.com/th/id/OIG4.XAhDGU58e_ygduQpDnsN?pid=ImgGn"
+              alt="Comida 2"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://th.bing.com/th/id/OIG4.925rkf2lqRtO57.XNTe3?pid=ImgGn"
+              alt="Comida 3"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://th.bing.com/th/id/OIG4.tHfddJ4sK7HZnZRrKIAM?pid=ImgGn"
+              alt="Comida 4"
+            />
+          </Carousel.Item>
+        </Carousel>
+
+        {/* Texto de Bienvenida - Siempre en el centro */}
+        <div className="carousel-caption-container">
+          <div className="carousel-caption-content">
+            <h1>El catálogo más completo de productos</h1>
+            <p>¡Diversas comidas y mucho más!</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Descripción del trabajo */}
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col-lg-6">
+            <h2 className="text-center">Bienvenido a ProductosOnline</h2>
+            <p className="lead">
+              Somos la tienda online con el catálogo más completo de productos de alimentos, bebidas y mucho más. Ofrecemos una experiencia de compra única, con productos de calidad, atención al cliente excepcional y un proceso de compra rápido y seguro. ¡Explora nuestro catálogo y encuentra todo lo que necesitas!
+            </p>
+          </div>
+          <div className="col-lg-6">
+            <img
+              src="https://th.bing.com/th/id/OIG1.VTcfpw9mnwaQl6_WoVcj?w=1024&h=1024&rs=1&pid=ImgDetMain"
+              alt="Productos"
+              className="img-fluid rounded"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-dark text-white py-4">
+        <div className="container text-center">
+          <p>© 2024 ProductosOnline. Todos los derechos reservados.</p>
+          <button
+            className="btn btn-light rounded-circle"
+            onClick={scrollToTop}
+            style={{ position: 'fixed', bottom: '20px', right: '20px', fontSize: '24px' }}
+          >
+            <i className="fas fa-arrow-circle-up"></i>
+          </button>
+        </div>
       </footer>
     </div>
   );
