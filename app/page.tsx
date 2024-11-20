@@ -26,11 +26,11 @@ export default function Index() {
           <img
               src="https://images.vexels.com/media/users/3/200098/isolated/lists/7ad7c76da9a0cd7d2b01b64b2590617b-icono-de-carrito-de-compras-icono-de-carrito-de-compras.png" // Asegúrate de tener tu imagen de logo en la carpeta 'public'
               alt="ProductosOnline"
-              style={{ width: '50', height: 'auto' }} // Aumenta el ancho aquí
+              style={{ width: '50', height: '30' }} // Aumenta el ancho aquí
               className="d-block mx-auto"
           />
       </Link>
-
+p
           {/* Botón de login */}
           <div className="d-flex justify-content-end">
             <button

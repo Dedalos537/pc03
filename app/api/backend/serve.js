@@ -1,14 +1,16 @@
-const express = require('express');
-const cors = require('cors');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Usuario = require('./models/Usuario');
-const Producto = require('./models/Producto');
-const sequelize = require('./db');
-const path = require('path');
+import express from 'express';
+import cors from 'cors';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import Usuario from './models/Usuario.js';
+import Producto from './models/Producto.js';
+import sequelize from './db.js';
+import path from 'path';
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
+
+// Configuración adicional aquí
 
 const JWT_SECRET = 'clave_secreta';
 

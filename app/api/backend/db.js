@@ -1,8 +1,8 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('crud_productos', 'root', '', {
-  host: 'localhost',
+const sequelize = new Sequelize(process.env.DATABASE_URL || 'mysql://root@localhost:3306/crud_productos', {
   dialect: 'mysql',
+  logging: false,
 });
 
-module.exports = sequelize;
+export default sequelize;
