@@ -25,14 +25,15 @@ export default function Index() {
         <div className="container">
           {/* Logo - Centrando y aumentando el tamaño */}
           <Link href="/" className="navbar-brand mx-auto">
-          < Image
-              src="https://images.vexels.com/media/users/3/200098/isolated/lists/7ad7c76da9a0cd7d2b01b64b2590617b-icono-de-carrito-de-compras-icono-de-carrito-de-compras.png" // Asegúrate de tener tu imagen de logo en la carpeta 'public'
+            <Image
+              src="https://images.vexels.com/media/users/3/200098/isolated/lists/7ad7c76da9a0cd7d2b01b64b2590617b-icono-de-carrito-de-compras-icono-de-carrito-de-compras.png"
               alt="ProductosOnline"
-              style={{ width: '50', height: '30' }} // Aumenta el ancho aquí
+              width={50} // Especifica el ancho
+              height={30} // Especifica la altura
               className="d-block mx-auto"
-          />
-      </Link>
-p
+            />
+          </Link>
+
           {/* Botón de login */}
           <div className="d-flex justify-content-end">
             <button
@@ -50,30 +51,38 @@ p
         <Carousel className="mt-4">
           <Carousel.Item>
             <Image
-              className="d-block w-100"
+              className="carousel-img d-block w-100"
               src="https://th.bing.com/th/id/OIG4.r1IKq.qnXVbwjAgcQdMT?w=1024&h=1024&rs=1&pid=ImageDetMain"
               alt="Comida 1"
+              width={1024}
+              height={600}
             />
           </Carousel.Item>
           <Carousel.Item>
             <Image
-              className="d-block w-100"
+              className="carousel-img d-block w-100"
               src="https://th.bing.com/th/id/OIG4.XAhDGU58e_ygduQpDnsN?pid=ImageGn"
               alt="Comida 2"
+              width={1024}
+              height={600}
             />
           </Carousel.Item>
           <Carousel.Item>
             <Image
-              className="d-block w-100"
+              className="carousel-img d-block w-100"
               src="https://th.bing.com/th/id/OIG4.925rkf2lqRtO57.XNTe3?pid=ImageGn"
               alt="Comida 3"
+              width={1024}
+              height={600}
             />
           </Carousel.Item>
           <Carousel.Item>
             <Image
-              className="d-block w-100"
+              className="carousel-img d-block w-100"
               src="https://th.bing.com/th/id/OIG4.tHfddJ4sK7HZnZRrKIAM?pid=ImageGn"
               alt="Comida 4"
+              width={1024}
+              height={600}
             />
           </Carousel.Item>
         </Carousel>
@@ -100,6 +109,8 @@ p
             <Image
               src="https://th.bing.com/th/id/OIG1.VTcfpw9mnwaQl6_WoVcj?w=1024&h=1024&rs=1&pid=ImageDetMain"
               alt="Productos"
+              width={740}
+              height={600}
               className="Image-fluid rounded"
             />
           </div>

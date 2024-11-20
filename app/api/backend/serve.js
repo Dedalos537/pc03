@@ -6,8 +6,17 @@ import Usuario from './models/Usuario.js';
 import Producto from './models/Producto.js';
 import sequelize from './db.js';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
+app.use('/favicon.ico', express.static(join(__dirname, 'public', 'favicon.ico')));
+
+
 const PORT = process.env.PORT || 4000;
 
 // Configuración adicional aquí
