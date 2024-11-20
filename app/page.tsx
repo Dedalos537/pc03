@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Link from 'next/link';
+import Image from 'next/image';
+
 
 export default function Index() {
   const router = useRouter();
@@ -23,7 +25,7 @@ export default function Index() {
         <div className="container">
           {/* Logo - Centrando y aumentando el tamaño */}
           <Link href="/" className="navbar-brand mx-auto">
-          <img
+          < Image
               src="https://images.vexels.com/media/users/3/200098/isolated/lists/7ad7c76da9a0cd7d2b01b64b2590617b-icono-de-carrito-de-compras-icono-de-carrito-de-compras.png" // Asegúrate de tener tu imagen de logo en la carpeta 'public'
               alt="ProductosOnline"
               style={{ width: '50', height: '30' }} // Aumenta el ancho aquí
@@ -47,30 +49,30 @@ p
       <div className="carousel-container">
         <Carousel className="mt-4">
           <Carousel.Item>
-            <img
+            <Image
               className="d-block w-100"
-              src="https://th.bing.com/th/id/OIG4.r1IKq.qnXVbwjAgcQdMT?w=1024&h=1024&rs=1&pid=ImgDetMain"
+              src="https://th.bing.com/th/id/OIG4.r1IKq.qnXVbwjAgcQdMT?w=1024&h=1024&rs=1&pid=ImageDetMain"
               alt="Comida 1"
             />
           </Carousel.Item>
           <Carousel.Item>
-            <img
+            <Image
               className="d-block w-100"
-              src="https://th.bing.com/th/id/OIG4.XAhDGU58e_ygduQpDnsN?pid=ImgGn"
+              src="https://th.bing.com/th/id/OIG4.XAhDGU58e_ygduQpDnsN?pid=ImageGn"
               alt="Comida 2"
             />
           </Carousel.Item>
           <Carousel.Item>
-            <img
+            <Image
               className="d-block w-100"
-              src="https://th.bing.com/th/id/OIG4.925rkf2lqRtO57.XNTe3?pid=ImgGn"
+              src="https://th.bing.com/th/id/OIG4.925rkf2lqRtO57.XNTe3?pid=ImageGn"
               alt="Comida 3"
             />
           </Carousel.Item>
           <Carousel.Item>
-            <img
+            <Image
               className="d-block w-100"
-              src="https://th.bing.com/th/id/OIG4.tHfddJ4sK7HZnZRrKIAM?pid=ImgGn"
+              src="https://th.bing.com/th/id/OIG4.tHfddJ4sK7HZnZRrKIAM?pid=ImageGn"
               alt="Comida 4"
             />
           </Carousel.Item>
@@ -95,10 +97,10 @@ p
             </p>
           </div>
           <div className="col-lg-6">
-            <img
-              src="https://th.bing.com/th/id/OIG1.VTcfpw9mnwaQl6_WoVcj?w=1024&h=1024&rs=1&pid=ImgDetMain"
+            <Image
+              src="https://th.bing.com/th/id/OIG1.VTcfpw9mnwaQl6_WoVcj?w=1024&h=1024&rs=1&pid=ImageDetMain"
               alt="Productos"
-              className="img-fluid rounded"
+              className="Image-fluid rounded"
             />
           </div>
         </div>
