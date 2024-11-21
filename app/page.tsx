@@ -11,9 +11,6 @@ import Image from 'next/image';
 export default function Index() {
   const router = useRouter();
 
-  const handleLoginRedirect = () => {
-    router.push("/login");
-  };
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
