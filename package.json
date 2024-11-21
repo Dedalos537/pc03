@@ -5,10 +5,12 @@
   "type":"module",
   
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "react-scripts start",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "axios": "^1.7.7",
