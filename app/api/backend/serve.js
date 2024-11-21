@@ -1,3 +1,4 @@
+
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
@@ -107,10 +108,12 @@ app.listen(PORT, async () => {
   }
 });
 
-// Rutas para productos
+// Obtener productos (sin los eliminados, solo los activos)
 app.get('/api/productos', async (req, res) => {
   try {
-    const productos = await Producto.findAll();
+    const productos = await Producto.findAll({
+      where: { eliminado: false },  // Solo productos no eliminados
+    });
     res.json(productos);
   } catch (error) {
     console.error('Error al obtener productos:', error);
@@ -130,7 +133,7 @@ app.post('/api/productos', verificarToken, verificarRolAdmin, async (req, res) =
   }
 });
 
-// Eliminar un producto solo para admin
+// Eliminar un producto (solo marcar como eliminado)
 app.delete('/api/productos/:id', verificarToken, verificarRolAdmin, async (req, res) => {
   const { id } = req.params;
   try {
@@ -138,13 +141,55 @@ app.delete('/api/productos/:id', verificarToken, verificarRolAdmin, async (req, 
     if (!producto) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
-    await producto.destroy();
-    res.status(200).json({ message: 'Producto eliminado con éxito' });
+    
+    // Marcar el producto como eliminado
+    producto.eliminado = true;
+    producto.fecha_eliminacion = new Date();
+    await producto.save();
+
+    res.status(200).json({ message: 'Producto marcado como eliminado con éxito' });
   } catch (error) {
     console.error('Error al eliminar producto:', error);
     res.status(500).json({ error: 'Error al eliminar producto' });
   }
 });
+
+// Ruta para actualizar un producto (solo admin)
+app.put('/api/productos/:id', verificarToken, verificarRolAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { nombre, precio, imagen_url } = req.body;
+  try {
+    const producto = await Producto.findByPk(id);
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+
+    // Actualizamos el producto
+    producto.nombre = nombre || producto.nombre;
+    producto.precio = precio || producto.precio;
+    producto.imagen_url = imagen_url || producto.imagen_url;
+
+    await producto.save(); // Guardamos los cambios
+
+    res.status(200).json(producto); // Respondemos con el producto actualizado
+  } catch (error) {
+    console.error('Error al actualizar producto:', error);
+    res.status(500).json({ error: 'Error al actualizar producto' });
+  }
+});
+// Obtener productos eliminados (solo para admin)
+app.get('/api/productos/eliminados', verificarToken, verificarRolAdmin, async (req, res) => {
+  try {
+    const productosEliminados = await Producto.findAll({
+      where: { eliminado: true },
+    });
+    res.json(productosEliminados);
+  } catch (error) {
+    console.error('Error al obtener productos eliminados:', error);
+    res.status(500).json({ error: 'Error al obtener productos eliminados' });
+  }
+});
+
 
 // Rutas para autenticación
 app.post('/api/register', async (req, res) => {
@@ -194,5 +239,26 @@ app.post('/api/login', async (req, res) => {
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ error: 'Error al iniciar sesión' });
+  }
+});
+
+// Restaurar un producto eliminado (solo admin)
+app.put('/api/productos/restaurar/:id', verificarToken, verificarRolAdmin, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const producto = await Producto.findByPk(id);
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+
+    // Restaurar el producto
+    producto.eliminado = false;
+    producto.fecha_eliminacion = null;  // Limpiar la fecha de eliminación
+    await producto.save();
+
+    res.status(200).json({ message: 'Producto restaurado con éxito' });
+  } catch (error) {
+    console.error('Error al restaurar producto:', error);
+    res.status(500).json({ error: 'Error al restaurar producto' });
   }
 });

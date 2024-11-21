@@ -89,9 +89,9 @@ export default function Index() {
 
         {/* Texto de Bienvenida - Siempre en el centro */}
         <div className="carousel-caption-container">
-          <div className="carousel-caption-content">
-            <h1>El catálogo más completo de productos</h1>
-            <p>¡Diversas comidas y mucho más!</p>
+          <div className="carousel-caption-content text-white">
+            <h1 className="text-white">El catálogo más completo de productos</h1>
+            <p className="text-white">¡Diversas comidas y mucho más!</p>
           </div>
         </div>
       </div>

@@ -282,171 +282,183 @@ body {
 .carousel-caption h3 {
   font-size: 3rem;
   font-weight: 700;
-  text-transform: uppercase;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 }
 
 .carousel-caption p {
-  font-size: 1.5rem;
-  font-weight: 500;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Transiciones y Animaciones del Footer */
-footer {
-  background: linear-gradient(135deg, #343a40, #6c757d);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-  padding: 40px 0;
-}
-
-footer p {
   font-size: 1.2rem;
-  font-weight: 500;
 }
 
-footer button {
-  transition: background 0.3s ease, transform 0.3s ease;
+/* Texto gris para todo el HTML */
+body, h1, h2, h3, h4, h5, h6, p, a, .carousel-caption p, .container-fluid p {
+  color: gray !important;
 }
 
-footer button:hover {
-  background-color: #17a2b8;
-  transform: translateY(-5px);
+.producto-titulo, .producto-descripcion, .producto-precio, .producto-imagen {
+  color: gray !important;
 }
 
-/* Efecto de Hover para las tarjetas */
-.card-body {
-  transition: transform 0.3s ease;
+.text-gray {
+  color: gray !important;
 }
 
-.card-body:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.card img {
-  transition: transform 0.3s ease;
-}
-
-.card img:hover {
-  transform: scale(1.1);
-}
-
-/* Estilo del botón "Volver Arriba" */
-#back-to-top {
-  border-radius: 50%;
-  background-color: #007bff;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  border: none;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-size: 30px;
-  z-index: 9999;
-}
-
-#back-to-top:hover {
-  background-color: #0056b3;
-  transform: translateY(-5px);
-}
-
-/* Agregar animación de entrada al cargar la página */
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
+/* Ajustes finales de estilos */
 .container-fluid {
-  animation: fadeIn 1s ease-in-out;
+  padding: 0;
 }
 
-/* Estilo de las imágenes del carrusel */
-.carousel-item img {
-  filter: brightness(0.8);
-  transition: transform 0.5s ease, filter 0.5s ease;
+.card-body {
+  padding: 20px;
 }
 
-.carousel-item img:hover {
-  transform: scale(1.1);
-  filter: brightness(1);
-}
-.carousel-caption-content h1 {
-  font-size: 3rem; /* Ajusta el tamaño según sea necesario */
-  font-weight: bold; /* Esto hace que el texto esté en negrita */
+.card-header {
+  background: #ff3a3a;
+  color: white;
 }
 
-.carousel-caption-content p {
-  font-size: 1.5rem; /* Ajusta el tamaño según sea necesario */
-  font-weight: bold; /* Esto hace que el texto esté en negrita */
+.card-footer {
+  background: #f1f1f1;
 }
-/* Estilo para los enlaces */
-a {
-  color: inherit;
+
+/* Footer */
+footer {
+  background-color: #0f0f0f;
+  color: #f1f1f1;
+  text-align: center;
+  padding: 15px 0;
+  font-size: 1rem;
+}
+
+footer a {
+  color: #ff6a00;
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+footer a:hover {
+  color: #ff3a3a;
 }
 
-/* Navbar Style */
-.navbar {
-  background-color: #343a40;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.navbar .navbar-brand {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.navbar .navbar-brand img {
-  width: 250px;
-  height: auto;
-  transition: transform 0.3s ease;
-}
-
-.navbar .navbar-toggler {
-  border-color: #ffffff;
-}
-
-/* Ajuste de la descripción y de las imágenes */
-.container .row {
-  margin-top: 40px;
-}
-
-.container .lead {
-  font-size: 1.2rem;
-  font-weight: 400;
-  line-height: 1.6;
-}
-
-.container img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Mobile Styling */
+/* Responsividad */
 @media (max-width: 768px) {
   .carousel-caption h3 {
     font-size: 2rem;
   }
 
   .carousel-caption p {
-    font-size: 1.2rem;
-  }
-
-  footer p {
     font-size: 1rem;
   }
 
-  .container img {
-    max-width: 100%;
-    border-radius: 8px;
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+}
+/* Cambiar el color del texto en los formularios */
+input, textarea, select, .register-input, .login-input {
+  color: gray !important; /* Asegura que el texto escrito sea gris */
+}
+
+input::placeholder, textarea::placeholder {
+  color: #b0b0b0 !important; /* Cambia el color de los placeholders a un gris más claro */
+}
+
+/* Otros estilos de los formularios */
+.register-input, .login-input {
+  background-color: rgba(255, 255, 255, 0.1); /* Fondo oscuro pero legible */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+}
+
+.register-input:focus, .login-input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: #ff3a3a; /* Cambiar el borde al hacer foco */
+  box-shadow: 0 0 10px rgba(255, 58, 58, 0.5);
+}
+/* Contenedor de las tarjetas de productos (usando grid para una disposición más eficiente) */
+.product-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Utiliza el tamaño mínimo de 250px por tarjeta */
+  gap: 20px; /* Espacio entre tarjetas */
+  padding: 20px;
+  justify-items: center; /* Centra las tarjetas dentro de cada celda */
+}
+
+/* Estilo de la tarjeta de producto */
+.product-card {
+  width: 100%; /* Asegura que la tarjeta ocupe todo el ancho de su contenedor */
+  height: 350px; /* Altura fija para la tarjeta */
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+/* Imagen de la tarjeta de producto */
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Asegura que la imagen se recorte adecuadamente */
+  border-bottom: 1px solid #ccc;
+}
+
+/* Información de la tarjeta de producto */
+.product-info {
+  padding: 15px;
+  flex-grow: 1; /* Ocupa el espacio restante para que el contenido se ajuste */
+}
+
+/* Título y descripción */
+.product-info h5 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.product-info p {
+  font-size: 14px;
+  color: #666;
+  margin: 10px 0;
+}
+
+/* Botón de la tarjeta */
+.product-info .btn {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ff3a3a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-info .btn:hover {
+  background-color: #ff6a00;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .product-card {
+    height: auto; /* Permite que la tarjeta se ajuste según el contenido */
+  }
+
+  .product-info h5 {
+    font-size: 16px;
+  }
+
+  .product-info p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-info h5 {
+    font-size: 14px;
+  }
+
+  .product-info p {
+    font-size: 12px;
   }
 }

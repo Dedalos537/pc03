@@ -7,10 +7,14 @@ import Button from 'react-bootstrap/Button';
 
 export default function Productos() {
   const [productos, setProductos] = useState([]);
-  const [user, setUser] = useState(null);
+  const [productosEliminados, setProductosEliminados] = useState([]);
+  const [user, setUser ] = useState(null);
   const [nuevoProducto, setNuevoProducto] = useState({ nombre: "", precio: "", imagen_url: "" });
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showModalSesion, setShowModalSesion] = useState(false);
+  const [showModalEliminar, setShowModalEliminar] = useState(false); // Modal para confirmar eliminación
+  const [productoAEliminar, setProductoAEliminar] = useState(null); // Producto a eliminar
   const [productoEditar, setProductoEditar] = useState(null);
   const router = useRouter();
 
@@ -32,7 +36,7 @@ export default function Productos() {
         }
 
         const usuarioData = await resUsuario.json();
-        setUser(usuarioData);
+        setUser (usuarioData);
 
         const resProductos = await fetch("http://localhost:4000/api/productos");
         if (!resProductos.ok) {
@@ -40,6 +44,19 @@ export default function Productos() {
         }
         const productosData = await resProductos.json();
         setProductos(productosData);
+
+        // Cargar productos eliminados si es un administrador
+        if (usuarioData.rol === "admin") {
+          const resProductosEliminados = await fetch("http://localhost:4000/api/productos/eliminados", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (resProductosEliminados.ok) {
+            const productosEliminadosData = await resProductosEliminados.json();
+            setProductosEliminados(productosEliminadosData);
+          }
+        }
       } catch (error) {
         console.error("Error al cargar datos:", error);
         alert("Error al cargar datos, por favor intenta de nuevo.");
@@ -57,7 +74,9 @@ export default function Productos() {
     setSearchQuery(e.target.value.toLowerCase());
   };
 
-  const agregarProducto = async () => {
+  const agregarProducto = async (e) => {
+    e.preventDefault(); // Esto previene la recarga de la página al enviar el formulario
+  
     try {
       const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:4000/api/productos", {
@@ -68,6 +87,7 @@ export default function Productos() {
         },
         body: JSON.stringify(nuevoProducto),
       });
+  
       if (res.ok) {
         const productoCreado = await res.json();
         setProductos([...productos, productoCreado]);
@@ -88,23 +108,26 @@ export default function Productos() {
   };
 
   const handleEliminar = (productoId) => {
-    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
-    if (confirmar) {
-      eliminarProducto(productoId);
-    }
+    setProductoAEliminar(productoId); // Guardar el ID del producto a eliminar
+    setShowModalEliminar(true); // Mostrar el modal de confirmación
   };
 
-  const eliminarProducto = async (productoId) => {
+  const confirmarEliminarProducto = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:4000/api/productos/${productoId}`, {
+      const url = `http://localhost:4000/api/productos/${productoAEliminar}`; // Asegúrate de que no haya espacios
+      console.log(url); // Para depuración
+  
+      const res = await fetch(url, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+  
       if (res.ok) {
-        setProductos(productos.filter((producto) => producto.id !== productoId));
+        setProductos(productos.filter((producto) => producto.id !== productoAEliminar));
+        setShowModalEliminar(false);
         alert("Producto eliminado con éxito.");
       } else {
         alert("Error al eliminar producto.");
@@ -128,7 +151,11 @@ export default function Productos() {
       });
       if (res.ok) {
         const productoActualizado = await res.json();
-        setProductos(productos.map(p => p.id === productoActualizado.id ? productoActualizado : p));
+        setProductos((prevProductos) =>
+          prevProductos.map((p) =>
+            p.id === productoActualizado.id ? productoActualizado : p
+          )
+        );
         setShowModal(false);
         alert("Producto actualizado con éxito.");
       } else {
@@ -139,23 +166,55 @@ export default function Productos() {
       alert("Error al editar producto.");
     }
   };
-
   const handleCerrarSesion = () => {
-    const confirmar = window.confirm("¿Estás seguro de que deseas cerrar sesión?");
-    if (confirmar) {
-      localStorage.removeItem("token");
-      router.push("/login");
-    }
+    setShowModalSesion(true); // Muestra un modal personalizado para confirmar el cierre de sesión
+  };
+
+  const handleConfirmarCerrarSesion = () => {
+    localStorage.removeItem("token");
+    setUser (null);
+    router.push("/login");
+  };
+
+  const handleCancelarCerrarSesion = () => {
+    setShowModalSesion(false);
   };
 
   const productosFiltrados = productos.filter((producto) =>
-    producto.nombre.toLowerCase().includes(searchQuery)
+    producto.nombre && producto.nombre.toLowerCase().includes(searchQuery) // Comprobamos que 'nombre' exista antes de hacer .toLowerCase()
   );
+
+const restaurarProducto = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    const url = `http://localhost:4000/api/productos/restaurar/${id}`; // Asegúrate de que el ID esté correctamente formateado
+    console.log(url); // Para depuración
+
+    const res = await fetch(url, {
+      method: "PUT", // Coincide con el método definido en tu backend
+      headers: {
+        Authorization: `Bearer ${token}`, // Token para autenticación
+        "Content-Type": "application/json", // Asegúrate de enviar JSON
+      },
+      // No necesitas un body si el backend no lo requiere
+    });
+
+    if (res.ok) {
+      alert("Producto restaurado con éxito.");
+    } else {
+      const errorData = await res.json(); // Capturar detalles del error
+      alert(`Error al restaurar producto: ${errorData.error || 'Error desconocido'}`);
+    }
+  } catch (error) {
+    console.error("Error al restaurar producto:", error);
+    alert("Error al restaurar producto.");
+  }
+};
+
 
   return (
     <div className="container py-4">
       <div className="row">
-        {/* Tarjeta con título, bienvenida y barra de búsqueda */}
         <div className={user && user.rol === "cliente" ? "col-12 mb-4" : "col-md-6 mb-4"}>
           <div className="card register-card">
             <div className="card-body">
@@ -163,7 +222,7 @@ export default function Productos() {
               {user && user.rol === "cliente" && (
                 <div className="d-flex justify-content-between align-items-center">
                   <h3 className="text-gray">Bienvenido, {user.nombre}</h3>
-                  <button className="btn register-button" onClick={handleCerrarSesion}>
+                  <button className="btn register-button text-white" onClick={handleCerrarSesion}>
                     Cerrar sesión
                   </button>
                 </div>
@@ -171,7 +230,7 @@ export default function Productos() {
               {user && user.rol === "admin" && (
                 <div className="d-flex justify-content-between align-items-center">
                   <h3 className="text-center text-gray mb-4">Bienvenido, {user.nombre}</h3>
-                  <button className="btn register-button" onClick={handleCerrarSesion}>
+                  <button className="btn register-button text-white" onClick={handleCerrarSesion}>
                     Cerrar sesión
                   </button>
                 </div>
@@ -189,131 +248,191 @@ export default function Productos() {
           </div>
         </div>
 
-        {/* Tarjeta de agregar producto */}
         {user && user.rol === "admin" && (
           <div className="col-md-6 mb-4">
             <div className="card register-card">
               <div className="card-body">
-                <h3 className="text-center text-gray mb-4">Agregar Producto</h3>
-                <input
-                  type="text"
-                  name="nombre"
-                  placeholder="Nombre del producto"
-                  value={nuevoProducto.nombre}
-                  onChange={handleInputChange}
-                  className="register-input mb-2 w-100"
-                />
-                <input
-                  type="number"
-                  name="precio"
-                  placeholder="Precio"
-                  value={nuevoProducto.precio}
-                  onChange={handleInputChange}
-                  className="register-input mb-2 w-100"
-                />
-                <input
-                  type="text"
-                  name="imagen_url"
-                  placeholder="URL de la imagen"
-                  value={nuevoProducto.imagen_url}
-                  onChange={handleInputChange}
-                  className="register-input mb-2 w-100"
-                />
-                <button onClick={agregarProducto} className="register-button w-100">
-                  Agregar Producto
-                </button>
+                <h5 className="card-title text-center text-gray">Agregar nuevo producto</h5>
+                <form className="d-flex flex-column" onSubmit={agregarProducto}>
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={nuevoProducto.nombre}
+                    onChange={handleInputChange}
+                    placeholder="Nombre"
+                    className="register-input mb-3"
+                    required
+                  />
+                  <input
+                    type="number"
+                    name="precio"
+                    value={nuevoProducto.precio}
+                    onChange={handleInputChange}
+                    placeholder="Precio"
+                    className="register-input mb-3"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="imagen_url"
+                    value={nuevoProducto.imagen_url}
+                    onChange={handleInputChange}
+                    placeholder="Imagen URL"
+                    className="register-input mb-3"
+                  />
+                  <button type="submit" className="btn register-button text-white">Agregar Producto</button>
+                </form>
               </div>
             </div>
           </div>
         )}
-      </div>
 
-      {/* Tarjetas de productos debajo de la tarjeta principal */}
-      <div className="row">
-        {productosFiltrados.map((producto) => (
-          <div className="col-md-3 mb-4" key={producto.id}>
-            <div className="card register-card">
-              {producto.imagen_url && (
-                <img
-                  src={producto.imagen_url}
-                  alt={producto.nombre}
-                  className="card-img-top"
-                  style={{ height: "200px", objectFit: "cover" }}
-                />
-              )}
-              <div className="card-body">
-                <h5 className="card-title text-black">{producto.nombre}</h5>
-                <p className="card-text text-black">Precio: ${producto.precio}</p>
-                {user && user.rol === "admin" && (
-                  <div className="d-flex justify-content-between">
-                    <button
-                      className="register-button"
-                      onClick={() => handleEditar(producto)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="register-button"
-                      onClick={() => handleEliminar(producto.id)}
-                    >
-                      Eliminar
-                    </button>
+        <div className="col-md-12">
+          <div className="card register-card">
+            <div className="card-body">
+              <h2 className="card-title text-center text-gray">Productos</h2>
+              <div className="row">
+                {productosFiltrados.map((producto) => (
+                  <div key={producto.id} className="col-md-4 mb-4">
+                    <div className="product-card">
+                      <img
+                        src={producto.imagen_url}
+                        alt={producto.nombre}
+                        className="card-img-top"
+                      />
+                      <div className="product-info">
+                        <h5 className="card-title">{producto.nombre}</h5>
+                        <p className="card-text">${producto.precio}</p>
+                        {user && user.rol === "admin" && (
+                          <>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleEditar(producto)}
+                            >
+                              Editar
+                            </button>
+                            <button
+                              className="btn btn-danger ml-2"
+                              onClick={() => handleEliminar(producto.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                )}
+                ))}
               </div>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* Modal de Edición */}
-      {productoEditar && (
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Editar Producto</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+        {productosEliminados.length > 0 && user && user.rol === "admin" && (
+          <div className="col-12 mt-4">
+            <div className="card register-card">
+              <div className="card-body">
+                <h3 className="text-center text-gray">Productos Eliminados</h3>
+                <div className="row">
+                  {productosEliminados.map((producto) => (
+                    <div key={producto.id} className="col-md-4 mb-4">
+                      <div className="product-card">
+                        <img
+                          src={producto.imagen_url}
+                          alt={producto.nombre}
+                          className="card-img-top"
+                        />
+                        <div className="product-info">
+                          <h5 className="card-title">{producto.nombre}</h5>
+                          <p className="card-text">${producto.precio}</p>
+                          <button
+                            className="btn btn-success"
+                            onClick={() => restaurarProducto(producto.id)}
+                          >
+                            Restaurar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      
+
+      {/* Modal para editar producto */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editar Producto</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="d-flex flex-column">
             <input
               type="text"
-              name="nombre"
-              placeholder="Nombre del producto"
-              value={productoEditar.nombre}
-              onChange={(e) =>
-                setProductoEditar({ ...productoEditar, nombre: e.target.value })
-              }
-              className="register-input mb-2 w-100"
+              value={productoEditar?.nombre || ""}
+              onChange={(e) => setProductoEditar({ ...productoEditar, nombre: e.target.value })}
+              placeholder="Nombre"
+              className="mb-3"
             />
             <input
               type="number"
-              name="precio"
+              value={productoEditar?.precio || ""}
+              onChange={(e) => setProductoEditar({ ...productoEditar, precio: e.target.value })}
               placeholder="Precio"
-              value={productoEditar.precio}
-              onChange={(e) =>
-                setProductoEditar({ ...productoEditar, precio: e.target.value })
-              }
-              className="register-input mb-2 w-100"
-            />
+              className="mb-3"/>
             <input
               type="text"
-              name="imagen_url"
-              placeholder="URL de la imagen"
-              value={productoEditar.imagen_url}
-              onChange={(e) =>
-                setProductoEditar({ ...productoEditar, imagen_url: e.target.value })
-              }
-              className="register-input mb-2 w-100"
+              value={productoEditar?.imagen_url || ""}
+              onChange={(e) => setProductoEditar({ ...productoEditar, imagen_url: e.target.value })}
+              placeholder="Imagen URL"
+              className="mb-3"
             />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
-              Cerrar
-            </Button>
-            <Button variant="primary" onClick={handleGuardarEdicion}>
-              Guardar Cambios
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cerrar
+          </Button>
+          <Button variant="primary" onClick={handleGuardarEdicion}>
+            Guardar cambios
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal para confirmar eliminación */}
+      <Modal show={showModalEliminar} onHide={() => setShowModalEliminar(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar Eliminación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>¿Estás seguro de que deseas eliminar este producto?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModalEliminar(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={confirmarEliminarProducto}>
+            Eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal para confirmar cierre de sesión */}
+      <Modal show={showModalSesion} onHide={handleCancelarCerrarSesion}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar cierre de sesión</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>¿Estás seguro de que deseas cerrar sesión?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancelarCerrarSesion}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={handleConfirmarCerrarSesion}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
     </div>
   );
-}
+};
